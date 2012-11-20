@@ -1,0 +1,6 @@
+<h3>UnJumble</h3>
+Version 1.0<br>
+Copyleft 2012<br>
+<b>Anurag Bhandari</b><br>
+<i>anuragbhandari.com</i><br>
+<i>anurag.bhd@gmail.com</i>
