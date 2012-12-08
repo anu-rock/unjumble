@@ -12,7 +12,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_about">About this app</string>
     <string name="pref_fetch_meaning_title">Display meanings</string>
-    <string name="pref_fetch_meaning_summ">Fetch meanings of umjumbled word suggestions from Wordnik (an online service). An active Internet connection is required.</string>
+    <string name="pref_fetch_meaning_summ">Fetch meanings of unjumbled word suggestions from Wordnik (an online service). An active Internet connection is required.</string>
     <string name="text_nothing_found">nothing; there\'s no such word!</string>
     <string name="text_empty">Let\'s get unjumbling</string>
     <string name="text_meaning_not_found">Meaning not found</string>
