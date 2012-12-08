@@ -47,7 +47,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 		// Set the Wordnik API key
 		// A unique key is required to use their API
 		// Get yours from http://developer.wordnik.com
-		System.setProperty("WORDNIK_API_KEY", "162b9646b73d03e82a00908a35a0e5e928da5987ef67d9683");
+		System.setProperty("WORDNIK_API_KEY", "your-key-here");
 	}
 	
 	
