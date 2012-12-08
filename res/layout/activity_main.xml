@@ -4,21 +4,21 @@
     android:background="@drawable/background"
     android:orientation="vertical"
     android:paddingLeft="8dp"
-    android:paddingRight="8dp" >
+    android:paddingRight="8dp">
 
      <TextView android:id="@+id/query"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:text=""
-               android:textColor="#294da9"
-               android:textStyle="italic"
-               android:textSize="25sp"/>
+	     android:layout_width="match_parent"
+	     android:layout_height="wrap_content"
+	     android:text=""
+	     android:textColor="#294da9"
+	     android:textStyle="italic"
+	     android:textSize="25sp"/>
      
      <ListView android:id="@android:id/list"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:layout_weight="1"
-               android:drawSelectorOnTop="false"/>
+	     android:layout_width="match_parent"
+	     android:layout_height="match_parent"
+	     android:layout_weight="1"
+	     android:drawSelectorOnTop="false"/>
 
      <TextView
          android:id="@android:id/empty"

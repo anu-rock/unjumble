@@ -10,7 +10,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.app.SearchManager;
 import android.app.LoaderManager;
@@ -141,16 +140,6 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 	    Toast.makeText(this, getString(R.string.text_copy_success), Toast.LENGTH_SHORT).show();
 	}
 	
-	@SuppressLint("NewApi")
-	@Override
-    public void onBackPressed() {
-		super.onBackPressed();
-		// Not really working as of now
-		//if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-		//	mainMenu.findItem(R.id.menu_search).collapseActionView();
-		//}
-    }
-	
 	
 	/******* T H E   C O M M O N   M E T H O D S *******/
 	private void DoUnjumbling(String query) {
@@ -273,7 +262,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 		    	
 		    	// Execute our AsyncTask (on a background thread)
 				sqlData = data;
-				new DoUnjumblingTask().execute(suggestedWords.toArray(new String[suggestedWords.size()]));
+				new FetchMeaningsTask().execute(suggestedWords.toArray(new String[suggestedWords.size()]));
 			}
 			// Show words without meanings (either user hasn't opted for it or there's no Internet)
 			else {
@@ -297,7 +286,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 	/******* T H E   A S Y N C T A S K   C L A S S *******/
 	// Creating our AsyncTask class as an inner class to give it access to the 
 	// "this" instance of our MainActivity class
-	private class DoUnjumblingTask extends AsyncTask<String, Void, HashMap<String, Definition>> {
+	private class FetchMeaningsTask extends AsyncTask<String, Void, HashMap<String, Definition>> {
 		@Override
 		protected HashMap<String, Definition> doInBackground(String... words) {
 			HashMap<String, Definition> wordMeanings = new HashMap<String, Definition>();
