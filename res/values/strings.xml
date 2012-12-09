@@ -19,4 +19,5 @@
     <string name="text_copy_success">Word copied to clipboard</string>
     <string name="text_could_mean">could mean</string>
     <string name="text_app_logo">App Logo</string>
+    <string name="text_wordnik_poweredby">Powered by Wordnik</string>
 </resources>

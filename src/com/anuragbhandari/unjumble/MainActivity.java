@@ -19,18 +19,26 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.net.Uri;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +68,8 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 	private boolean isFetchMeanings;
 	private Cursor sqlData;
 	private HashMap<String, Definition> wordMeanings;
+	ImageView wordnikPoweredby;
+    TextView wordnikAttribution;
 	
 	
 	/******* T H E   A C T I V I T Y   M E T H O D S *******/
@@ -67,7 +77,24 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Set some views for later use
         queryWordTextView = (TextView) this.findViewById(R.id.query);
+        wordnikPoweredby = (ImageView)this.findViewById(R.id.wordnik_poweredby);
+        wordnikAttribution = (TextView)this.findViewById(R.id.wordnik_attribution);
+        // Handle ItemLongClick event
+        this.getListView().setLongClickable(true);
+    	this.getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
+            	String selectedWord = "";
+        	    Cursor cc = (Cursor) (getListView().getItemAtPosition(position));
+        	    if (cc != null) {
+        	    	selectedWord = cc.getString(cc.getColumnIndex(WordsTable.COLUMN_WORD));
+        	    }
+            	Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse("http://wordnik.com/words/" + selectedWord));
+                startActivity(browse);
+    	        return true;
+    	    }
+    	});
     }
     
     @Override
@@ -75,9 +102,13 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
     	setIntent(intent); // optional
     	// Get the intent, verify the action and get the query
     	if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-  	      String query = intent.getStringExtra(SearchManager.QUERY);
-  	      queryWordTextView.setText("\'" + query + "\' " + getString(R.string.text_could_mean));
-  	      DoUnjumbling(query);
+    		// Hide wordnik attribution (just to be safe)
+    		wordnikPoweredby.setVisibility(View.INVISIBLE);
+	        wordnikAttribution.setVisibility(View.INVISIBLE);
+	        // Start the unjumbling process
+	        String query = intent.getStringExtra(SearchManager.QUERY);
+	        queryWordTextView.setText("\'" + query + "\' " + getString(R.string.text_could_mean));
+	        DoUnjumbling(query);
   	    }
     }
 
@@ -168,8 +199,11 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 	                if(column == 1) {
 	                    TextView tv = (TextView) view;
 	                    String word = cursor.getString(cursor.getColumnIndex(WordsTable.COLUMN_WORD));
-	                    String wordMeaning = (wordMeanings == null ? getString(R.string.text_meaning_not_found) : wordMeanings.get(word).getText());
-	                    tv.setText(wordMeaning);
+	                    String wordMeaning = (wordMeanings != null ? wordMeanings.get(word).getText() : getString(R.string.text_meaning_not_found));
+	                    String wordMeaningURL = wordMeaning + "\nhttp://wordnik.com/words/" + word;
+	                    Spannable WordtoSpan = new SpannableString(wordMeaningURL);        
+	                    WordtoSpan.setSpan(new ForegroundColorSpan(Color.rgb(127, 180, 236)), wordMeaning.length(), wordMeaningURL.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+	                    tv.setText(WordtoSpan);
 	                    return true;
 	                }
 	                return false;
@@ -302,6 +336,7 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 					Definition noMeaning = new Definition() {
             			{
             				setText(getString(R.string.text_meaning_not_found));
+            				setAttributionText("");
             			}
             		};
             		wordMeanings.put(word, defs == null || defs.size() == 0 ? noMeaning  : defs.get(0));
@@ -323,6 +358,11 @@ public class MainActivity extends ListActivity implements LoaderManager.LoaderCa
 		    MainActivity.this.hideProgressBar();
 		    // Re-enable the Clear button
 			MainActivity.this.mainMenu.findItem(R.id.menu_clear).setEnabled(true);
+			// Show wordnik attribution
+			Definition firstDef = result.values().toArray(new Definition[result.size()])[0];
+			MainActivity.this.wordnikAttribution.setText("Meanings " + firstDef.getAttributionText());
+			MainActivity.this.wordnikPoweredby.setVisibility(View.VISIBLE);
+			MainActivity.this.wordnikAttribution.setVisibility(View.VISIBLE);
 		}
 	}
 }

@@ -15,6 +15,12 @@
          android:layout_height="wrap_content"
          android:textColor="#777"/>
      
+     <TextView android:id="@+id/item_url"
+         android:textSize="13sp"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:textColor="#777"/>
+     
      <TextView android:id="@+id/item_id"
          android:textSize="10sp"
          android:layout_width="match_parent"
